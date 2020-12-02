@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StatusTimeOffDTO {
-    private TimeOffDTO timeOffDTO;
-    private UserDTO userDTO;
+    private Integer id;
+    private TimeOffDTO timeOff;
+    private UserDTO approver;
     private String response;
     private Integer status;
 }

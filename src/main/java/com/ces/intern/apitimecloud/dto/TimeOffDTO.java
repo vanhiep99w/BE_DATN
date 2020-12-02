@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class TimeOffDTO extends BaseDTO {
-    private UserDTO userDTO;
+    private UserDTO user;
     private Date startTime;
     private Date endTime;
     private String Description;

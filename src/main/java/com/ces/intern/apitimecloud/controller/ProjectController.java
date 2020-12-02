@@ -6,6 +6,7 @@ import com.ces.intern.apitimecloud.http.exception.BadRequestException;
 import com.ces.intern.apitimecloud.http.request.ProjectRequest;
 import com.ces.intern.apitimecloud.http.request.ProjectUserRequest;
 import com.ces.intern.apitimecloud.http.request.TaskRequest;
+import com.ces.intern.apitimecloud.http.request.Test;
 import com.ces.intern.apitimecloud.http.response.ProjectResponse;
 import com.ces.intern.apitimecloud.http.response.ProjectUserResponse;
 import com.ces.intern.apitimecloud.http.response.TaskResponse;
@@ -54,8 +55,9 @@ public class ProjectController {
         this.discussionService = discussionService;
     }
 
-    @GetMapping("/api/test")
-    public ResponseEntity<String> testSpringBoot(){
+    @PostMapping("/api/test")
+    public ResponseEntity<String> testSpringBoot(@RequestBody() Test test){
+        System.out.println(test.getValue());
         return ResponseEntity.ok("Success");
     }
 

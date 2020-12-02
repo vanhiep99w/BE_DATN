@@ -7,9 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StatusTimeOffRequest {
-
-    private Integer approverId;
-    private String response;
-    private Integer status;
+public class Test {
+    private String value;
 }

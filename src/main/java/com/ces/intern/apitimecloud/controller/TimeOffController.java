@@ -27,14 +27,15 @@ public class TimeOffController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping("/{timeOffId}")
+    public TimeOffDTO get(@PathVariable(value = "timeOffId")Integer timeOffId){
+        return timeOffService.getTimeOffById(timeOffId);
+    }
     @PostMapping("")
-    private TimeOffDTO create(@RequestBody TimeOffRequest timeOffRequest) throws Exception {
+    public TimeOffDTO create(@RequestBody TimeOffRequest timeOffRequest) throws Exception {
         if(timeOffRequest.getDescription().isEmpty()) throw new BadRequestException(ExceptionMessage.MISSING_REQUIRE_FIELD.name());
         TimeOffEntity timeOffEntity = timeOffService.createTimeOff(timeOffRequest);
-        UserDTO userDTO = modelMapper.map(timeOffEntity.getUser(), UserDTO.class);
-        TimeOffDTO timeOffDTO = modelMapper.map(timeOffEntity, TimeOffDTO.class);
-        timeOffDTO.setUserDTO(userDTO);
-        return timeOffDTO;
+        return modelMapper.map(timeOffEntity, TimeOffDTO.class);
     }
 
     @PutMapping("/{timeOffId}")
