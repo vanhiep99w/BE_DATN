@@ -1,5 +1,6 @@
 package com.ces.intern.apitimecloud.controller;
 
+import com.ces.intern.apitimecloud.dto.StatusTimeOffDTO;
 import com.ces.intern.apitimecloud.dto.TimeOffDTO;
 import com.ces.intern.apitimecloud.dto.UserDTO;
 import com.ces.intern.apitimecloud.entity.TimeOffEntity;
@@ -51,8 +52,13 @@ public class TimeOffController {
         return ResponseMessage.DELETE_SUCCESS;
     }
 
-    @GetMapping("/approved")
+    @GetMapping("/approver")
     public List<UserDTO> getApproved() {
         return timeOffService.getApprover();
+    }
+
+    @GetMapping("/pending")
+    public List<StatusTimeOffDTO> getAllPendingTimeOff() {
+        return timeOffService.getAllPendingTimeOffs();
     }
 }

@@ -17,7 +17,4 @@ public interface TimeOffRepository extends JpaRepository<TimeOffEntity, Integer>
     @Query(value="select count(*) from status_time_off where status = 2 and time_off_id in (select time_off_id from time_off where user_id = :userId)", nativeQuery = true)
     int countApprovedTimeOffByUserId(@Param("userId") Integer userId);
 
-    @Query(value="select * from public.user where user_id in (select user_id from company_user where role_id = 1 or role_id = 7)", nativeQuery = true)
-    List<UserEntity> getApprover();
-
 }

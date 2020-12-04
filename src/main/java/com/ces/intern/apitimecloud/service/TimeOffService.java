@@ -17,4 +17,5 @@ public interface TimeOffService {
     Integer countTimeOffApprovedByUserId(Integer userId);
     List<UserDTO> getApprover();
     List<StatusTimeOffDTO> getAllPendingTimeOffs();
+
 }

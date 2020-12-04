@@ -6,9 +6,11 @@ import com.ces.intern.apitimecloud.dto.UserDTO;
 import com.ces.intern.apitimecloud.entity.StatusTimeOffEntity;
 import com.ces.intern.apitimecloud.entity.TimeOffEntity;
 import com.ces.intern.apitimecloud.entity.UserEntity;
+import com.ces.intern.apitimecloud.entity.UserRoleEntity;
 import com.ces.intern.apitimecloud.http.exception.BadRequestException;
 import com.ces.intern.apitimecloud.http.exception.NotFoundException;
 import com.ces.intern.apitimecloud.http.request.TimeOffRequest;
+import com.ces.intern.apitimecloud.repository.ProjectUserRepository;
 import com.ces.intern.apitimecloud.repository.StatusTimeOffRepository;
 import com.ces.intern.apitimecloud.repository.TimeOffRepository;
 import com.ces.intern.apitimecloud.repository.UserRepository;
@@ -17,6 +19,7 @@ import com.ces.intern.apitimecloud.service.TimeOffService;
 import com.ces.intern.apitimecloud.util.ExceptionMessage;
 import com.ces.intern.apitimecloud.util.StatusTO;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,14 +36,15 @@ public class TimeOffServiceImpl implements TimeOffService {
     private final StatusTimeOffService statusTimeOffService;
     private final StatusTimeOffRepository statusTimeOffRepository;
 
+
     public TimeOffServiceImpl(TimeOffRepository timeOffRepository,
                               UserRepository userRepository,
                               ModelMapper modelMapper,
                               StatusTimeOffService statusTimeOffService,
                               StatusTimeOffRepository statusTimeOffRepository
                             ){
-        this.timeOffRepository = timeOffRepository;
         this.userRepository = userRepository;
+        this.timeOffRepository = timeOffRepository;
         this.modelMapper= modelMapper;
         this.statusTimeOffService = statusTimeOffService;
         this.statusTimeOffRepository = statusTimeOffRepository;
@@ -109,7 +113,7 @@ public class TimeOffServiceImpl implements TimeOffService {
 
     @Override
     public List<UserDTO> getApprover() {
-        List<UserEntity> userEntities = timeOffRepository.getApprover();
+        List<UserEntity> userEntities = userRepository.getApprover();
         return userEntities.stream()
                 .map(element -> modelMapper.map(element, UserDTO.class))
                 .collect(Collectors.toList());
@@ -118,10 +122,8 @@ public class TimeOffServiceImpl implements TimeOffService {
 
     @Override
     public List<StatusTimeOffDTO> getAllPendingTimeOffs() {
-        List<StatusTimeOffEntity> statusTimeOffEntities =  statusTimeOffRepository.findAll();
-        statusTimeOffEntities.stream()
-                .filter(ele -> ele.getStatus() == 1)
-                .collect(Collectors.toList());
+        List<StatusTimeOffEntity> statusTimeOffEntities =  statusTimeOffRepository.findAllByStatus(StatusTO.PENDING.getId());
+
         return statusTimeOffEntities.stream()
                 .map(ele -> modelMapper.map(ele, StatusTimeOffDTO.class))
                 .collect(Collectors.toList());

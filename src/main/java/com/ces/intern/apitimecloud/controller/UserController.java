@@ -253,9 +253,6 @@ public class UserController {
         return timeOffService.countTimeOffApprovedByUserId(userId);
     }
 
-    @GetMapping("time-off/pending")
-    public List<StatusTimeOffDTO> getAllPendingTimeOff() {
-        return timeOffService.getAllPendingTimeOffs();
-    }
+
 
 }

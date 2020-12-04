@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface StatusTimeOffRepository extends JpaRepository<StatusTimeOffEntity,Integer > {
     List<StatusTimeOffEntity> findAll();
+    List<StatusTimeOffEntity> findAllByStatus(Integer status);
 }
