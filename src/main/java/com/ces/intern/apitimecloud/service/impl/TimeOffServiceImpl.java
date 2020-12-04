@@ -1,5 +1,6 @@
 package com.ces.intern.apitimecloud.service.impl;
 
+import com.ces.intern.apitimecloud.dto.StatusTimeOffDTO;
 import com.ces.intern.apitimecloud.dto.TimeOffDTO;
 import com.ces.intern.apitimecloud.dto.UserDTO;
 import com.ces.intern.apitimecloud.entity.StatusTimeOffEntity;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TimeOffServiceImpl implements TimeOffService {
@@ -28,16 +31,19 @@ public class TimeOffServiceImpl implements TimeOffService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final StatusTimeOffService statusTimeOffService;
+    private final StatusTimeOffRepository statusTimeOffRepository;
 
     public TimeOffServiceImpl(TimeOffRepository timeOffRepository,
                               UserRepository userRepository,
                               ModelMapper modelMapper,
-                              StatusTimeOffService statusTimeOffService
+                              StatusTimeOffService statusTimeOffService,
+                              StatusTimeOffRepository statusTimeOffRepository
                             ){
         this.timeOffRepository = timeOffRepository;
         this.userRepository = userRepository;
         this.modelMapper= modelMapper;
         this.statusTimeOffService = statusTimeOffService;
+        this.statusTimeOffRepository = statusTimeOffRepository;
     }
 
     @Override
@@ -73,15 +79,51 @@ public class TimeOffServiceImpl implements TimeOffService {
 
     @Override
     public TimeOffDTO updateTimeOff(TimeOffRequest timeOffRequest, Integer timeOffId) {
-//        TimeOffEntity timeOffEntity = timeOffRepository.findById(timeOffId)
-//                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_FOUND_RECORD.getMessage() + "with" + timeOffId));
-//        timeOffEntity.setStartTime(new Date(timeOffRequest.getMilisecondsStartTime()));
-//        timeOffEntity.setEndTime(new Date(timeOffRequest.getMilisecondsEndTime()));
-//        timeOffEntity.setDescription(timeOffRequest.getDescription());
-//        timeOffEntity.setModifyAt(new Date());
-//        TimeOffEntity timeOffEntityUpdate = timeOffRepository.save(timeOffEntity);
-//        TimeOffDTO timeOffDTO = modelMapper.map(timeOffEntityUpdate, TimeOffDTO.class);
-//        timeOffDTO.setUserDTO(modelMapper.map(timeOffEntityUpdate.getUser(), UserDTO.class));
-        return null;
+        TimeOffEntity timeOffEntity = timeOffRepository.findById(timeOffId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_FOUND_RECORD.getMessage() + "with" + timeOffId));
+        timeOffEntity.setStartTime(new Date(timeOffRequest.getMilisecondsStartTime()));
+        timeOffEntity.setEndTime(new Date(timeOffRequest.getMilisecondsEndTime()));
+        timeOffEntity.setDescription(timeOffRequest.getDescription());
+        timeOffEntity.setModifyAt(new Date());
+        TimeOffEntity timeOffEntityUpdate = timeOffRepository.save(timeOffEntity);
+        TimeOffDTO timeOffDTO = modelMapper.map(timeOffEntityUpdate, TimeOffDTO.class);
+        timeOffDTO.setUser(modelMapper.map(timeOffEntityUpdate.getUser(), UserDTO.class));
+        return timeOffDTO;
+    }
+
+    @Override
+    public List<StatusTimeOffDTO> getTimeOffByUserId(Integer userId) {
+        List<TimeOffEntity> timeOffs = timeOffRepository.getAllTimeOffByUserId(userId);
+        List<StatusTimeOffEntity> statustimeOffEntitys = timeOffs.stream()
+                .map(timeOff -> statusTimeOffService.getById(timeOff.getId()))
+                .collect(Collectors.toList());
+        return statustimeOffEntitys.stream()
+                .map(statustimeOffEntity -> modelMapper.map(statustimeOffEntity, StatusTimeOffDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer countTimeOffApprovedByUserId(Integer userId) {
+        return timeOffRepository.countApprovedTimeOffByUserId(userId);
+    }
+
+    @Override
+    public List<UserDTO> getApprover() {
+        List<UserEntity> userEntities = timeOffRepository.getApprover();
+        return userEntities.stream()
+                .map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<StatusTimeOffDTO> getAllPendingTimeOffs() {
+        List<StatusTimeOffEntity> statusTimeOffEntities =  statusTimeOffRepository.findAll();
+        statusTimeOffEntities.stream()
+                .filter(ele -> ele.getStatus() == 1)
+                .collect(Collectors.toList());
+        return statusTimeOffEntities.stream()
+                .map(ele -> modelMapper.map(ele, StatusTimeOffDTO.class))
+                .collect(Collectors.toList());
     }
 }

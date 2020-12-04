@@ -13,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/time-off")
 public class TimeOffController {
@@ -47,5 +49,10 @@ public class TimeOffController {
     private String delete(@PathVariable Integer timeOffId) {
         timeOffService.deleteTimeOff(timeOffId);
         return ResponseMessage.DELETE_SUCCESS;
+    }
+
+    @GetMapping("/approved")
+    public List<UserDTO> getApproved() {
+        return timeOffService.getApprover();
     }
 }
