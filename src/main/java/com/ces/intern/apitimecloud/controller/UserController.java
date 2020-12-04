@@ -42,6 +42,7 @@ public class UserController {
     private final DiscussionService discussionService;
     private final InteractService interactService;
     private final ProjectUserRepository projectUserRepository;
+    private final TimeOffService timeOffService;
 
     @Autowired
     public UserController(UserService userService,
@@ -51,7 +52,8 @@ public class UserController {
                           TaskService taskService,
                           DiscussionService discussionService,
                           InteractService interactService,
-                          ProjectUserRepository projectUserRepository){
+                          ProjectUserRepository projectUserRepository,
+                          TimeOffService timeOffService){
         this.userService = userService;
         this.projectService = projectService;
         this.modelMapper = modelMapper;
@@ -60,6 +62,7 @@ public class UserController {
         this.discussionService = discussionService;
         this.interactService = interactService;
         this.projectUserRepository = projectUserRepository;
+        this.timeOffService = timeOffService;
     }
 
     @PostMapping(value ="")
@@ -236,6 +239,12 @@ public class UserController {
     public List<ProjectDTO> getAllProjectManagedByUserId(@PathVariable("userId")Integer userId){
         if(userId == null) throw new BadRequestException(ExceptionMessage.MISSING_REQUIRE_FIELD.getMessage() + "userId");
         return projectService.getProjectManagedByUserId(userId);
+    }
+
+    @GetMapping("{userId}/time-off")
+    public List<TimeOffDTO> getAllTimeOffByUserId(@PathVariable("userId") Integer userId) {
+        if(userId == null) throw new BadRequestException(ExceptionMessage.MISSING_REQUIRE_FIELD.getMessage() + userId);
+        return timeOffService.getTimeOffByUserId(userId);
     }
 
 }

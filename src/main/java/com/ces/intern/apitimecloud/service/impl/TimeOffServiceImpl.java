@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TimeOffServiceImpl implements TimeOffService {
@@ -73,15 +75,23 @@ public class TimeOffServiceImpl implements TimeOffService {
 
     @Override
     public TimeOffDTO updateTimeOff(TimeOffRequest timeOffRequest, Integer timeOffId) {
-//        TimeOffEntity timeOffEntity = timeOffRepository.findById(timeOffId)
-//                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_FOUND_RECORD.getMessage() + "with" + timeOffId));
-//        timeOffEntity.setStartTime(new Date(timeOffRequest.getMilisecondsStartTime()));
-//        timeOffEntity.setEndTime(new Date(timeOffRequest.getMilisecondsEndTime()));
-//        timeOffEntity.setDescription(timeOffRequest.getDescription());
-//        timeOffEntity.setModifyAt(new Date());
-//        TimeOffEntity timeOffEntityUpdate = timeOffRepository.save(timeOffEntity);
-//        TimeOffDTO timeOffDTO = modelMapper.map(timeOffEntityUpdate, TimeOffDTO.class);
-//        timeOffDTO.setUserDTO(modelMapper.map(timeOffEntityUpdate.getUser(), UserDTO.class));
-        return null;
+        TimeOffEntity timeOffEntity = timeOffRepository.findById(timeOffId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.NOT_FOUND_RECORD.getMessage() + "with" + timeOffId));
+        timeOffEntity.setStartTime(new Date(timeOffRequest.getMilisecondsStartTime()));
+        timeOffEntity.setEndTime(new Date(timeOffRequest.getMilisecondsEndTime()));
+        timeOffEntity.setDescription(timeOffRequest.getDescription());
+        timeOffEntity.setModifyAt(new Date());
+        TimeOffEntity timeOffEntityUpdate = timeOffRepository.save(timeOffEntity);
+        TimeOffDTO timeOffDTO = modelMapper.map(timeOffEntityUpdate, TimeOffDTO.class);
+        timeOffDTO.setUser(modelMapper.map(timeOffEntityUpdate.getUser(), UserDTO.class));
+        return timeOffDTO;
+    }
+
+    @Override
+    public List<TimeOffDTO> getTimeOffByUserId(Integer userId) {
+        List<TimeOffEntity> timeOffs = timeOffRepository.getAllTimeOffByUserId(userId);
+        return timeOffs.stream()
+                .map(timeOff -> modelMapper.map(timeOff, TimeOffDTO.class))
+                .collect(Collectors.toList());
     }
 }
