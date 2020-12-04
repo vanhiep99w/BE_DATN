@@ -242,9 +242,20 @@ public class UserController {
     }
 
     @GetMapping("{userId}/time-off")
-    public List<TimeOffDTO> getAllTimeOffByUserId(@PathVariable("userId") Integer userId) {
+    public List<StatusTimeOffDTO> getAllStatusTimeOffsByUserId(@PathVariable("userId") Integer userId) {
         if(userId == null) throw new BadRequestException(ExceptionMessage.MISSING_REQUIRE_FIELD.getMessage() + userId);
         return timeOffService.getTimeOffByUserId(userId);
+    }
+
+    @GetMapping("{userId}/time-off/approved")
+    public Integer countApprovedTimeOffByUserId(@PathVariable("userId") Integer userId) {
+        if(userId == null) throw new BadRequestException(ExceptionMessage.MISSING_REQUIRE_FIELD.getMessage() + userId);
+        return timeOffService.countTimeOffApprovedByUserId(userId);
+    }
+
+    @GetMapping("time-off/pending")
+    public List<StatusTimeOffDTO> getAllPendingTimeOff() {
+        return timeOffService.getAllPendingTimeOffs();
     }
 
 }

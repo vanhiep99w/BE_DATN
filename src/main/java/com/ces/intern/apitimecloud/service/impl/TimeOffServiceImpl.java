@@ -1,5 +1,6 @@
 package com.ces.intern.apitimecloud.service.impl;
 
+import com.ces.intern.apitimecloud.dto.StatusTimeOffDTO;
 import com.ces.intern.apitimecloud.dto.TimeOffDTO;
 import com.ces.intern.apitimecloud.dto.UserDTO;
 import com.ces.intern.apitimecloud.entity.StatusTimeOffEntity;
@@ -30,16 +31,19 @@ public class TimeOffServiceImpl implements TimeOffService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final StatusTimeOffService statusTimeOffService;
+    private final StatusTimeOffRepository statusTimeOffRepository;
 
     public TimeOffServiceImpl(TimeOffRepository timeOffRepository,
                               UserRepository userRepository,
                               ModelMapper modelMapper,
-                              StatusTimeOffService statusTimeOffService
+                              StatusTimeOffService statusTimeOffService,
+                              StatusTimeOffRepository statusTimeOffRepository
                             ){
         this.timeOffRepository = timeOffRepository;
         this.userRepository = userRepository;
         this.modelMapper= modelMapper;
         this.statusTimeOffService = statusTimeOffService;
+        this.statusTimeOffRepository = statusTimeOffRepository;
     }
 
     @Override
@@ -88,10 +92,38 @@ public class TimeOffServiceImpl implements TimeOffService {
     }
 
     @Override
-    public List<TimeOffDTO> getTimeOffByUserId(Integer userId) {
+    public List<StatusTimeOffDTO> getTimeOffByUserId(Integer userId) {
         List<TimeOffEntity> timeOffs = timeOffRepository.getAllTimeOffByUserId(userId);
-        return timeOffs.stream()
-                .map(timeOff -> modelMapper.map(timeOff, TimeOffDTO.class))
+        List<StatusTimeOffEntity> statustimeOffEntitys = timeOffs.stream()
+                .map(timeOff -> statusTimeOffService.getById(timeOff.getId()))
+                .collect(Collectors.toList());
+        return statustimeOffEntitys.stream()
+                .map(statustimeOffEntity -> modelMapper.map(statustimeOffEntity, StatusTimeOffDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer countTimeOffApprovedByUserId(Integer userId) {
+        return timeOffRepository.countApprovedTimeOffByUserId(userId);
+    }
+
+    @Override
+    public List<UserDTO> getApprover() {
+        List<UserEntity> userEntities = timeOffRepository.getApprover();
+        return userEntities.stream()
+                .map(element -> modelMapper.map(element, UserDTO.class))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<StatusTimeOffDTO> getAllPendingTimeOffs() {
+        List<StatusTimeOffEntity> statusTimeOffEntities =  statusTimeOffRepository.findAll();
+        statusTimeOffEntities.stream()
+                .filter(ele -> ele.getStatus() == 1)
+                .collect(Collectors.toList());
+        return statusTimeOffEntities.stream()
+                .map(ele -> modelMapper.map(ele, StatusTimeOffDTO.class))
                 .collect(Collectors.toList());
     }
 }
