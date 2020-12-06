@@ -121,11 +121,13 @@ public class TimeOffServiceImpl implements TimeOffService {
     }
 
     @Override
-    public List<StatusTimeOffDTO> getAllPendingTimeOffs() {
-        List<StatusTimeOffEntity> statusTimeOffEntities =  statusTimeOffRepository.findAllByStatus(StatusTO.PENDING.getId());
+    public List<StatusTimeOffDTO> getAllTimeOffsByStatusId(Integer statusId) {
+        List<StatusTimeOffEntity> statusTimeOffEntities =  statusTimeOffRepository.findAllByStatus(statusId);
 
         return statusTimeOffEntities.stream()
                 .map(ele -> modelMapper.map(ele, StatusTimeOffDTO.class))
                 .collect(Collectors.toList());
     }
+
+
 }

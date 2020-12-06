@@ -10,6 +10,7 @@ import com.ces.intern.apitimecloud.repository.TimeOffRepository;
 import com.ces.intern.apitimecloud.service.TimeOffService;
 import com.ces.intern.apitimecloud.util.ExceptionMessage;
 import com.ces.intern.apitimecloud.util.ResponseMessage;
+import com.ces.intern.apitimecloud.util.StatusTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,12 @@ public class TimeOffController {
 
     @GetMapping("/pending")
     public List<StatusTimeOffDTO> getAllPendingTimeOff() {
-        return timeOffService.getAllPendingTimeOffs();
+        return timeOffService.getAllTimeOffsByStatusId(StatusTO.PENDING.getId());
+    }
+
+
+    @GetMapping("/approve")
+    public List<StatusTimeOffDTO> getAllApproveTimeOff(){
+        return timeOffService.getAllTimeOffsByStatusId(StatusTO.APPROVE.getId());
     }
 }
