@@ -22,6 +22,12 @@ public class StatusTimeOffController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping("/non_pending")
+    public List<StatusTimeOffDTO> getAll(@RequestParam(value = "limit")Integer limit,
+                                         @RequestParam(value = "page")Integer page){
+        return statusTimeOffService.getAllStatusTimeOffNonPending(limit, page);
+    }
+
     @GetMapping("/{time-off-id}")
     public StatusTimeOffDTO getById(@PathVariable(value = "time-off-id")Integer timeOffId){
         StatusTimeOffEntity statusTimeOffEntity = statusTimeOffService.getById(timeOffId);
@@ -29,11 +35,12 @@ public class StatusTimeOffController {
     }
 
     @PostMapping("/{time-off-id}")
-    public StatusTimeOffDTO update(@PathVariable(value="time-off_id")Integer timeOffId,
+    public StatusTimeOffDTO update(@PathVariable(value="time-off-id")Integer timeOffId,
                                    @RequestBody StatusTimeOffRequest request){
         StatusTimeOffEntity statusTimeOffEntity = statusTimeOffService.update(request, timeOffId);
         return modelMapper.map(statusTimeOffEntity, StatusTimeOffDTO.class);
     }
+
 
 
 

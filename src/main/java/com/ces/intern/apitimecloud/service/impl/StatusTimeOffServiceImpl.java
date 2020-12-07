@@ -1,6 +1,7 @@
 package com.ces.intern.apitimecloud.service.impl;
 
 
+import com.ces.intern.apitimecloud.dto.StatusTimeOffDTO;
 import com.ces.intern.apitimecloud.entity.StatusTimeOffEntity;
 import com.ces.intern.apitimecloud.entity.TimeOffEntity;
 import com.ces.intern.apitimecloud.entity.UserEntity;
@@ -11,21 +12,30 @@ import com.ces.intern.apitimecloud.repository.UserRepository;
 import com.ces.intern.apitimecloud.service.StatusTimeOffService;
 import com.ces.intern.apitimecloud.util.ExceptionMessage;
 import com.ces.intern.apitimecloud.util.StatusTO;
-import org.springframework.security.core.userdetails.User;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StatusTimeOffServiceImpl implements StatusTimeOffService {
 
     private final StatusTimeOffRepository statusTimeOffRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     public StatusTimeOffServiceImpl(StatusTimeOffRepository statusTimeOffRepository,
-                                    UserRepository userRepository){
+                                    UserRepository userRepository,
+                                    ModelMapper modelMapper){
         this.statusTimeOffRepository = statusTimeOffRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -59,6 +69,7 @@ public class StatusTimeOffServiceImpl implements StatusTimeOffService {
         statusTimeOffEntity.setStatus(request.getStatus());
         statusTimeOffEntity.setApprover(userEntity);
         statusTimeOffEntity.setAcceptAt(new Date());
+        statusTimeOffEntity.setResponse(request.getResponse());
 
         return statusTimeOffRepository.save(statusTimeOffEntity);
     }
@@ -66,6 +77,26 @@ public class StatusTimeOffServiceImpl implements StatusTimeOffService {
     @Override
     public void delete(Integer timeOffId) {
         statusTimeOffRepository.deleteById(timeOffId);
+    }
+
+    @Override
+    public List<StatusTimeOffDTO> getAllStatusTimeOff() {
+        List<StatusTimeOffEntity> statusTimeOffEntities = statusTimeOffRepository.findAll();
+        return statusTimeOffEntities
+                .stream()
+                .map(statusTimeOffEntity -> modelMapper.map(statusTimeOffEntity, StatusTimeOffDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StatusTimeOffDTO> getAllStatusTimeOffNonPending(Integer limit, Integer page) {
+        Pageable p = PageRequest.of(page, limit);
+        List<Integer> temp = Arrays.asList(StatusTO.PENDING.getId());
+        List<StatusTimeOffEntity> statusTimeOffEntities = statusTimeOffRepository.getAllByStatusNotIn(temp, p);
+        return statusTimeOffEntities
+                .stream()
+                .map(ele -> modelMapper.map(ele, StatusTimeOffDTO.class))
+                .collect(Collectors.toList());
     }
 
 }
