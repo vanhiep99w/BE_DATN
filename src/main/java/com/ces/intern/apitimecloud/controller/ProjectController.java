@@ -121,8 +121,8 @@ public class ProjectController {
     }
 
     @PostMapping("{projectId}/users/{userId}")
-    public ProjectUserResponse addUserToProject(@PathVariable Integer projectId, @PathVariable Integer userId){
-        ProjectUserDTO projectUserDTO = projectService.addUserToProject(userId, projectId);
+    public ProjectUserResponse addUserToProject(@PathVariable Integer projectId, @PathVariable Integer userId, @RequestBody Float rate){
+        ProjectUserDTO projectUserDTO = projectService.addUserToProject(userId, projectId, rate);
         return modelMapper.map(projectUserDTO,ProjectUserResponse.class);
     }
 

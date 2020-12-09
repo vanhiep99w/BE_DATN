@@ -27,7 +27,7 @@ public interface ProjectService {
 
     List<ProjectDTO> getAllByUserIdAndIsDoing(Integer userId);
 
-    ProjectUserDTO addUserToProject(Integer userId, Integer projectId);
+    ProjectUserDTO addUserToProject(Integer userId, Integer projectId, Float rate);
 
     List<ProjectDTO> getAllByUserIdOOrderByTaskCount(Integer userId);
 
