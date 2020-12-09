@@ -127,11 +127,16 @@ public class UserController {
 
     @GetMapping("{id}/project-user-available")
     public List<ProjectUserResponse> getAllProjectsByUserIdAndNotDone(@PathVariable("id") Integer userId){
-        List<ProjectUserDTO> projectUsers = projectService.getAllByUserIdAndNotDone(userId);
-        return  projectUsers
-                .stream()
-                .map(projectUser->modelMapper.map(projectUser,ProjectUserResponse.class))
-                .collect(Collectors.toList());
+        try {
+            List<ProjectUserDTO> projectUsers = projectService.getAllByUserIdAndNotDone(userId);
+            return  projectUsers
+                    .stream()
+                    .map(projectUser->modelMapper.map(projectUser,ProjectUserResponse.class))
+                    .collect(Collectors.toList());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("{id}/times")
