@@ -1,5 +1,6 @@
 package com.ces.intern.apitimecloud.controller;
 
+import com.ces.intern.apitimecloud.dto.StatusTimeOffDTO;
 import com.ces.intern.apitimecloud.dto.TimeOffDTO;
 import com.ces.intern.apitimecloud.dto.UserDTO;
 import com.ces.intern.apitimecloud.entity.TimeOffEntity;
@@ -9,6 +10,7 @@ import com.ces.intern.apitimecloud.repository.TimeOffRepository;
 import com.ces.intern.apitimecloud.service.TimeOffService;
 import com.ces.intern.apitimecloud.util.ExceptionMessage;
 import com.ces.intern.apitimecloud.util.ResponseMessage;
+import com.ces.intern.apitimecloud.util.StatusTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +53,19 @@ public class TimeOffController {
         return ResponseMessage.DELETE_SUCCESS;
     }
 
-    @GetMapping("/approved")
+    @GetMapping("/approver")
     public List<UserDTO> getApproved() {
         return timeOffService.getApprover();
+    }
+
+    @GetMapping("/pending")
+    public List<StatusTimeOffDTO> getAllPendingTimeOff() {
+        return timeOffService.getAllTimeOffsByStatusId(StatusTO.PENDING.getId());
+    }
+
+
+    @GetMapping("/approve")
+    public List<StatusTimeOffDTO> getAllApproveTimeOff(){
+        return timeOffService.getAllTimeOffsByStatusId(StatusTO.APPROVE.getId());
     }
 }
