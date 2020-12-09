@@ -41,6 +41,12 @@ public class ProjectUserEntity implements Serializable {
     @Column(name="is_show")
     private Boolean isShow;
 
+    @Column(name = "salary")
+    private Float salary;
+
+    @Column(name = "rate")
+    private Float rate;
+
     @Embeddable
     @Getter
     @Setter

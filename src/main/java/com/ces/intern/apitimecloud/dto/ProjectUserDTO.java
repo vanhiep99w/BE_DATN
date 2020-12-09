@@ -12,4 +12,6 @@ public class ProjectUserDTO {
     private Boolean isDoing;
     private Integer index;
     private Boolean isShow;
+    private Float rate;
+    private Float salary;
 }
