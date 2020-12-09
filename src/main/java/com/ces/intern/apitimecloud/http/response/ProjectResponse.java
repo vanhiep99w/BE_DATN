@@ -18,4 +18,5 @@ public class ProjectResponse extends BaseResponse{
     private String color;
     private Boolean done;
     private UserDTO projectManager;
+    private Integer budget;
 }

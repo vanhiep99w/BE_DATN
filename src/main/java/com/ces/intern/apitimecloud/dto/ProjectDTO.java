@@ -16,4 +16,5 @@ public class ProjectDTO extends BaseDTO {
     private String color;
     private Boolean done;
     private UserDTO projectManager;
+    private Integer budget;
 }

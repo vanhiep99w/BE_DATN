@@ -77,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setProjectManager(user);
 
         projectEntity = projectRepository.save(projectEntity);
-        this.addUserToProject(userId, projectEntity.getId());
+        this.addUserToProject(userId, projectEntity.getId(), (float) 0);
 
         return modelMapper.map(projectEntity,ProjectDTO.class);
     }
@@ -123,6 +123,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setName(request.getName());
         projectEntity.setClientName(request.getClientName());
         projectEntity.setColor(request.getColor());
+        projectEntity.setBudget(request.getBudget());
         projectEntity.setProjectManager(user);
         projectEntity.setModifyAt(new Date());
         projectEntity.setModifiedBy(modifiedBy);
@@ -169,6 +170,10 @@ public class ProjectServiceImpl implements ProjectService {
             projectUserEntity.setIsShow(projectUserRequest.getIsShow());
         }if(projectUserRequest.getIndex() != null){
             projectUserEntity.setIndex(projectUserRequest.getIndex());
+        }if(projectUserRequest.getRate() != null) {
+            projectUserEntity.setRate(projectUserRequest.getRate());
+        }if(projectUserRequest.getSalary() != null) {
+            projectUserEntity.setSalary(projectUserRequest.getSalary());
         }
         projectUserRepository.save(projectUserEntity);
         return modelMapper.map(projectUserEntity, ProjectUserDTO.class);
@@ -261,7 +266,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
-    public ProjectUserDTO addUserToProject(Integer userId, Integer projectId) {
+    public ProjectUserDTO addUserToProject(Integer userId, Integer projectId, Float rate) {
         Optional<ProjectUserEntity> optional = projectUserRepository.findById(new ProjectUserEntity.EmbedId(projectId, userId));
         ProjectUserEntity projectUserEntity;
         int length  = projectUserRepository.countByIsDoingAndEmbedId_UserId(true, userId);
@@ -281,6 +286,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectUserEntity = new ProjectUserEntity();
 
             projectUserEntity.setProject(projectEntity);
+            projectUserEntity.setRate(rate);
             projectUserEntity.setUser(userEntity);
             projectUserEntity.setIsDoing(true);
         }

@@ -14,4 +14,5 @@ public class ProjectRequest {
     private String color;
     private Boolean done;
     private Integer projectManagerId;
+    private Integer budget;
 }
