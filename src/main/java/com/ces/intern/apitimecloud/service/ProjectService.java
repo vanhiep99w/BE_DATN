@@ -2,7 +2,6 @@ package com.ces.intern.apitimecloud.service;
 
 import com.ces.intern.apitimecloud.dto.ProjectDTO;
 import com.ces.intern.apitimecloud.dto.ProjectUserDTO;
-import com.ces.intern.apitimecloud.entity.ProjectEntity;
 import com.ces.intern.apitimecloud.http.request.ProjectRequest;
 import com.ces.intern.apitimecloud.http.request.ProjectUserRequest;
 
@@ -27,7 +26,7 @@ public interface ProjectService {
 
     List<ProjectDTO> getAllByUserIdAndIsDoing(Integer userId);
 
-    ProjectUserDTO addUserToProject(Integer userId, Integer projectId, Float rate);
+    ProjectUserDTO addUserToProject(Integer userId, Integer projectId, ProjectUserRequest request);
 
     List<ProjectDTO> getAllByUserIdOOrderByTaskCount(Integer userId);
 

@@ -77,7 +77,9 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setProjectManager(user);
 
         projectEntity = projectRepository.save(projectEntity);
-        this.addUserToProject(userId, projectEntity.getId(), (float) 0);
+        ProjectUserRequest request1 = new ProjectUserRequest();
+        request1.setRate((float) 0);
+        this.addUserToProject(userId, projectEntity.getId(), request1);
 
         return modelMapper.map(projectEntity,ProjectDTO.class);
     }
@@ -266,7 +268,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional
-    public ProjectUserDTO addUserToProject(Integer userId, Integer projectId, Float rate) {
+    public ProjectUserDTO addUserToProject(Integer userId, Integer projectId, ProjectUserRequest request) {
         Optional<ProjectUserEntity> optional = projectUserRepository.findById(new ProjectUserEntity.EmbedId(projectId, userId));
         ProjectUserEntity projectUserEntity;
         int length  = projectUserRepository.countByIsDoingAndEmbedId_UserId(true, userId);
@@ -286,7 +288,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectUserEntity = new ProjectUserEntity();
 
             projectUserEntity.setProject(projectEntity);
-            projectUserEntity.setRate(rate);
+            projectUserEntity.setRate(request.getRate());
             projectUserEntity.setUser(userEntity);
             projectUserEntity.setIsDoing(true);
         }
