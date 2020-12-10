@@ -89,7 +89,6 @@ public class ProjectController {
     ){
 
         ProjectDTO projectDTO = projectService.updateProject(projectId,request,modifiedBy);
-
         return  modelMapper.map(projectDTO,ProjectResponse.class);
     }
 
@@ -228,6 +227,12 @@ public class ProjectController {
         return projectService.editProjectUser(projectId, userId, projectUserRequest);
     }
 
+    @GetMapping("/{projectId}/users/{userId}")
+    public ProjectUserDTO getProjectUserByProjectIdAndUserId(@PathVariable(value = "projectId")Integer projectId,
+                                          @PathVariable(value = "userId")Integer userId,
+                                          @RequestBody ProjectUserRequest projectUserRequest){
 
+        return projectService.editProjectUser(projectId, userId, projectUserRequest);
+    }
 
 }

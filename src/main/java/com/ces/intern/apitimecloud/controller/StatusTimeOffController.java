@@ -34,7 +34,7 @@ public class StatusTimeOffController {
         return modelMapper.map(statusTimeOffEntity, StatusTimeOffDTO.class);
     }
 
-    @PostMapping("/{time-off-id}")
+    @PutMapping("/{time-off-id}")
     public StatusTimeOffDTO update(@PathVariable(value="time-off-id")Integer timeOffId,
                                    @RequestBody StatusTimeOffRequest request){
         StatusTimeOffEntity statusTimeOffEntity = statusTimeOffService.update(request, timeOffId);
