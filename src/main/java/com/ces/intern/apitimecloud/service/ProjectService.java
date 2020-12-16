@@ -47,4 +47,6 @@ public interface ProjectService {
     ProjectUserDTO editProjectUser(Integer projectId, Integer userId, ProjectUserRequest projectUserRequest);
 
     List<ProjectDTO> getProjectManagedByUserId(Integer userId);
+
+    ProjectUserDTO getProjectUserByProjectIdAndUserId(Integer projectId, Integer userId);
 }

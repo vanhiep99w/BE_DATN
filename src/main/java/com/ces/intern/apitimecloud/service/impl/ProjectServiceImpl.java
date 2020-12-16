@@ -189,6 +189,16 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public ProjectUserDTO getProjectUserByProjectIdAndUserId(Integer projectId, Integer userId) {
+
+
+        ProjectUserEntity projectUserEntity = projectUserRepository.getByEmbedIdProjectIdAndEmbedIdUserId(projectId, userId);
+
+
+        return modelMapper.map(projectUserEntity, ProjectUserDTO.class);
+    }
+
 
     @Override
     @Transactional

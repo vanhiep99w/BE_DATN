@@ -125,6 +125,8 @@ public class ProjectController {
         return modelMapper.map(projectUserDTO,ProjectUserResponse.class);
     }
 
+
+
     @GetMapping("{projectId}/users/{userId}/tasks")
     public List<TaskResponse> getAllTaskByProjectIdAndUserId(@PathVariable Integer projectId, @PathVariable Integer userId){
         List<TaskDTO> taskDTOS= taskService.getAllByUserIdAndProjectId(userId, projectId);
@@ -229,10 +231,11 @@ public class ProjectController {
 
     @GetMapping("/{projectId}/users/{userId}")
     public ProjectUserDTO getProjectUserByProjectIdAndUserId(@PathVariable(value = "projectId")Integer projectId,
-                                          @PathVariable(value = "userId")Integer userId,
-                                          @RequestBody ProjectUserRequest projectUserRequest){
+                                          @PathVariable(value = "userId")Integer userId
+                                          @PathVariable(value = "userId")Integer userId
+                                          ){
 
-        return projectService.editProjectUser(projectId, userId, projectUserRequest);
+        return projectService.getProjectUserByProjectIdAndUserId(projectId, userId);
     }
 
 }
