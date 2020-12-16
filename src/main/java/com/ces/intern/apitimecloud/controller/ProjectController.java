@@ -232,7 +232,7 @@ public class ProjectController {
     @GetMapping("/{projectId}/users/{userId}")
     public ProjectUserDTO getProjectUserByProjectIdAndUserId(@PathVariable(value = "projectId")Integer projectId,
                                           @PathVariable(value = "userId")Integer userId
-                                          @PathVariable(value = "userId")Integer userId
+                                          
                                           ){
 
         return projectService.getProjectUserByProjectIdAndUserId(projectId, userId);
