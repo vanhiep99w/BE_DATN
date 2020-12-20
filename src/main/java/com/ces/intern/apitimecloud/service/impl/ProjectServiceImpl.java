@@ -302,6 +302,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectUserEntity.setUser(userEntity);
             projectUserEntity.setIsDoing(true);
         }
+        projectUserEntity.setIsShow(true);
         projectUserEntity.setIndex(length);
         projectUserRepository.save(projectUserEntity);
         return modelMapper.map(projectUserEntity,ProjectUserDTO.class);
