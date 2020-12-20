@@ -75,7 +75,6 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setBasicInfo(date, userId, date, userId);
         projectEntity.setDone(false);
         projectEntity.setProjectManager(user);
-
         projectEntity = projectRepository.save(projectEntity);
         ProjectUserRequest request1 = new ProjectUserRequest();
         request1.setRate((float) 0);
@@ -126,6 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectEntity.setClientName(request.getClientName());
         projectEntity.setColor(request.getColor());
         projectEntity.setBudget(request.getBudget());
+        projectEntity.setPermission(request.getPermission());
         projectEntity.setProjectManager(user);
         projectEntity.setModifyAt(new Date());
         projectEntity.setModifiedBy(modifiedBy);

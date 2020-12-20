@@ -15,4 +15,5 @@ public class ProjectRequest {
     private Boolean done;
     private Integer projectManagerId;
     private Integer budget;
+    private Boolean permission;
 }

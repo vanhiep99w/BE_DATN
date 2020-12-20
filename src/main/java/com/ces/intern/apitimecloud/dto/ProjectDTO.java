@@ -17,4 +17,5 @@ public class ProjectDTO extends BaseDTO {
     private Boolean done;
     private UserDTO projectManager;
     private Integer budget;
+    private Boolean permission;
 }

@@ -31,6 +31,9 @@ public class ProjectEntity extends BaseEntity {
     @Column(name = "budget")
     private Integer budget;
 
+    @Column(name="permission")
+    private Boolean permission;
+
     @OneToOne()
     @JoinColumn(name = "project_manager")
     private UserEntity projectManager;

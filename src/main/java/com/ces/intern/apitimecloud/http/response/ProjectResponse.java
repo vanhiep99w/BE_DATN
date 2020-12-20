@@ -19,4 +19,5 @@ public class ProjectResponse extends BaseResponse{
     private Boolean done;
     private UserDTO projectManager;
     private Integer budget;
+    private Boolean permission;
 }
