@@ -25,6 +25,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     Integer countByEmail(String email);
 
-    @Query(value="select * from public.user where user_id in (select user_id from company_user where role_id = 1 or role_id = 7)", nativeQuery = true)
+    @Query(value="select * from public.user where user_id in (select user_id from company_user where role_id = 1)", nativeQuery = true)
     List<UserEntity> getApprover();
 }
